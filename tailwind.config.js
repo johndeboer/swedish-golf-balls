@@ -2,7 +2,8 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,vue}"
+    "./src/**/*.{js,vue}",
+    "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},

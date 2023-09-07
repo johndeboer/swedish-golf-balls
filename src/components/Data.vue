@@ -1,5 +1,8 @@
 <script setup>
 import axios from "axios";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+import Slider from 'primevue/slider';
 
 import {
   LMap,
@@ -14,6 +17,7 @@ import "leaflet/dist/leaflet.css";
 <template>
   <div class="w-full flex flex-col items-center justify-center">
     <h2 class="text-4xl m-4">Swedish Golf Balls</h2>
+    <div class="text-xl m-4">Is there always a Topgolf right next to IKEA, or is it just me?</div>
 
     <!-- Map Div -->
     <div
@@ -25,9 +29,23 @@ import "leaflet/dist/leaflet.css";
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
-        <l-control class="bg-white text-black text-sm p-2 opacity-80" position="bottomleft">
-          <div class="flex justify-between mb-1"><img class="h-6 mr-1" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" /> IKEA</div>
-          <div class="flex justify-between"><img class="h-6 mr-1" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png" />Topgolf</div>
+        <l-control
+          class="bg-white text-black text-sm p-2 opacity-80"
+          position="bottomleft"
+        >
+          <div class="flex justify-between mb-1">
+            <img
+              class="h-6 mr-1"
+              src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png"
+            />
+            IKEA
+          </div>
+          <div class="flex justify-between">
+            <img
+              class="h-6 mr-1"
+              src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png"
+            />Topgolf
+          </div>
         </l-control>
         <l-marker
           :lat-lng="[store.lat, store.lon]"
@@ -66,7 +84,7 @@ import "leaflet/dist/leaflet.css";
       </l-map>
     </div>
 
-    <div class="w-full md:w-[800px] mt-2">
+    <div class="w-full md:w-[800px] mt-2 mb-16">
       <div class="grid grid-cols-1 md:grid-cols-2 w-full">
         <!-- Closest 5 Div -->
         <div class="w-full md:w-96 px-4">
@@ -115,6 +133,37 @@ import "leaflet/dist/leaflet.css";
           </div>
         </div>
       </div>
+      <div class="w-full border border-dashed border-slate-200 p-4 text-center text-xl md:text-3xl my-8">
+        {{ closePercent }}% of IKEA stores are within {{ closeRange }} miles of a Topgolf!
+        <slider v-model="closeRange" class="w-full mt-4" @change="setClosePercent(closeRange)"/>
+      </div>
+      <accordion class="mt-8">
+        <accordion-tab
+          :pt="{ headerAction: { class: 'hover:text-gray-200' } }"
+          header="What?"
+          >We're looking at the locations of all IKEA and Topgolf locations in
+          the United States, to see if they are generally located near each
+          other.
+          <br /><br/>
+          Since there are so many more Topgolf locations, it makes sense to look
+          at it from the perspective of IKEA - how close is the nearest Topgolf?
+        </accordion-tab>
+        <accordion-tab
+          :pt="{ headerAction: { class: 'hover:text-gray-200' } }"
+          header="Why?"
+          >While driving around the Eastern US this summer, I noticed an IKEA
+          and Topgolf near to each other. And then another, and another.
+          Frequently enough to make we wonder, "Is there something to this?" <br/><br/> It may just be a coincidence, 
+          but I was curious about building something
+          with Leaflet so here we are.</accordion-tab
+        >
+        <accordion-tab
+          :pt="{ headerAction: { class: 'hover:text-gray-200' } }"
+          header="How?"
+          >Swedish Golf Balls was built using Vue and Leaflet. <br/><br/>  Data was compiled using Python (BeautifulSoup, GeoPy).<br/> <br/> If you're curious, <a class="underline hover:text-blue-400" href="https://github.com/johndeboer/swedish-golf-balls">check out the repo on Github.</a></accordion-tab
+        >
+      </accordion>
+      <div class="w-full text-center mt-4">Made by <a class="underline hover:text-blue-400" href="https://github.com/johndeboer">John DeBoer</a></div>
     </div>
   </div>
 </template>
@@ -139,6 +188,8 @@ export default {
       lineIteration: 0,
       closest5: [],
       farthest5: [],
+      closePercent: 0,
+      closeRange: 20,
     };
   },
   methods: {
@@ -152,6 +203,10 @@ export default {
         [aLat, aLon],
         [bLat, bLon],
       ]);
+    },
+    setClosePercent(range){
+      const close = this.ikea.filter((a) => a.nearest_distance <= range).length;
+      this.closePercent = Math.round((close / this.ikea.length)*100)
     },
     setClosest5() {
       this.closest5 = this.ikea
@@ -169,12 +224,14 @@ export default {
       this.ikea = response.data;
       this.setClosest5();
       this.setFarthest5();
+      this.setClosePercent(this.closeRange);
     });
 
     axios.get("topgolf_locations.json").then((response) => {
       this.topgolf = response.data;
       this.setClosest5();
       this.setFarthest5();
+      this.setClosePercent(this.closeRange);
     });
   },
 };
