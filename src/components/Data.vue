@@ -7,6 +7,7 @@ import {
   LMarker,
   LIcon,
   LPolyline,
+  LControl,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 </script>
@@ -24,6 +25,10 @@ import "leaflet/dist/leaflet.css";
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
+        <l-control class="bg-white text-black text-sm p-2 opacity-80" position="bottomleft">
+          <div class="flex justify-between mb-1"><img class="h-6 mr-1" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" /> IKEA</div>
+          <div class="flex justify-between"><img class="h-6 mr-1" src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png" />Topgolf</div>
+        </l-control>
         <l-marker
           :lat-lng="[store.lat, store.lon]"
           v-for="store of ikea"
@@ -122,6 +127,7 @@ export default {
     LMarker,
     LIcon,
     LPolyline,
+    LControl,
   },
   data() {
     return {
