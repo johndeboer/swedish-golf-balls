@@ -1,4 +1,4 @@
-# swedish_golfballs
+# swedish_golf_balls
 
 This template should help get you started developing with Vue 3 in Vite.
 

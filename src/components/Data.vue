@@ -50,16 +50,16 @@ import "leaflet/dist/leaflet.css";
           <div class="w-full md:w-96 px-4">
             <h2 class="text-2xl border-b border-slate-400">IKEA stores nearest to Topgolf</h2>
             <div class="flex justify-between py-1 my-1 text-xl hover:bg-slate-700" v-for="store in closest5" @click="setLine(store.lat, store.lon, store.nearest_lat, store.nearest_lon)">
-              <div class="px-1">{{ store.city }}</div>
-              <div class="px-1">{{ Math.round(store.nearest_distance*100)/100 }} miles</div>
+              <div class="">{{ store.city }}</div>
+              <div class="">{{ Math.round(store.nearest_distance*100)/100 }} miles</div>
             </div>
           </div>
           <!-- Farthest 5 Div -->
           <div class="w-full md:w-96 px-4 mt-8 md:mt-0">
             <h2 class="text-2xl border-b border-slate-400">IKEA stores farthest from Topgolf</h2>
             <div class="flex justify-between py-1 my-1 text-xl hover:bg-slate-700" v-for="store in farthest5" @click="setLine(store.lat, store.lon, store.nearest_lat, store.nearest_lon)">
-              <div class="px-1">{{ store.city }}</div>
-              <div class="px-1">{{ Math.round(store.nearest_distance*100)/100 }} miles</div>
+              <div class="">{{ store.city }}</div>
+              <div class="">{{ Math.round(store.nearest_distance*100)/100 }} miles</div>
             </div>
           </div>
         </div>
