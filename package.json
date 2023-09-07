@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/swedish-golf-balls/",
+    "build": "vite build",
+    "pagesBuild": "vite build --base=/swedish-golf-balls/",
     "preview": "vite preview"
   },
   "dependencies": {
