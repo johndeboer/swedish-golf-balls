@@ -149,12 +149,12 @@ export default {
     },
     setClosest5() {
       this.closest5 = this.ikea
-        .sort((a, b) => a.nearest_distance > b.nearest_distance)
+        .sort((a, b) => a.nearest_distance - b.nearest_distance)
         .slice(0, 5);
     },
     setFarthest5() {
       this.farthest5 = this.ikea
-        .sort((a, b) => a.nearest_distance < b.nearest_distance)
+        .sort((a, b) => b.nearest_distance - a.nearest_distance)
         .slice(0, 5);
     },
   },
